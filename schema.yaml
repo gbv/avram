@@ -2,12 +2,16 @@
 title: Avram Schema Format
 description: JSON Schema of Avram Schema Format to validata Avram Schemas
 type: object
+additionalProperties: false
 properties:
   title:
     type: string
   description:
     type: string
   url:
+    type: string
+    format: uri
+  profile:
     type: string
     format: uri
   $schema:
@@ -36,10 +40,13 @@ definitions:
     patternProperties:
       '^.+$':
         type: object
+        additionalProperties: false
         properties:
           tag:
             type: string
           label:
+            type: string
+          description:
             type: string
           repeatable:
             type: boolean
@@ -78,6 +85,7 @@ definitions:
         patternProperties:
           '^.*$':
             type: object
+            additionalProperties: false
             properties:
               positions:
                 $ref: '#/definitions/positions'
@@ -87,6 +95,7 @@ definitions:
         patternProperties:
           '^.*$':
             type: object
+            additionalProperties: false
             properties:
               subfields:
                 $ref: '#/definitions/subfield-schedule'
@@ -94,10 +103,13 @@ definitions:
              - subfields
   subfield-schedule:
     type: object
+    additionalProperties: false
     properties:
       code:
         type: string
       label:
+        type: string
+      description:
         type: string
       repeatable:
         type: boolean
@@ -119,8 +131,11 @@ definitions:
       - $ref: '#/definitions/codedvalue'
   codedvalue:
     type: object
+    additionalProperties: false
     properties:
       label:
+        type: string
+      description:
         type: string
       url:
         $ref: '#/definitions/url'
@@ -134,7 +149,10 @@ definitions:
     type: object
     patternProperties:
       '^.+$':
+        additionalProperties: false
         properties:
           label:
+            type: string
+          description:
             type: string
 $schema: http://json-schema.org/draft-06/schema#

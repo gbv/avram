@@ -8,8 +8,8 @@ language: en
 related formats such as [PICA](../../pica) and [MAB](../../mab).
 
 * author: Jakob Voß
-* version: 0.4.0
-* date: 2019-05-09
+* version: 0.5.0
+* date: 2020-08-04
 
 ## Introduction
 
@@ -61,14 +61,19 @@ The schema SHOULD contain keys documenting the format defined by the schema:
 * key `title` with the name of the format
 * key `description` with a short description of the format
 * key `url` with a homepage URL of the format
+* key `profile` with an URI of the format
 * key `language` with the language values of keys `title`, `description`,
-  and `label` used throughout the schema. Can be assumed as `und` by defe t.
+  and `label` used throughout the schema. Can be assumed as `und` by default.
 
 The schema MAY contain:
 
-* key `$schema` with an URL of an [Avram metaschema](#metaschema)
+* key `$schema` with an URL of the [Avram metaschema](#metaschema)
 * key `deprecated-fields` with a [field schedule](#field-schedule)
 * key `count` with a non-negative integer
+
+Multiple schemas with same `title`, `description`, `url` and/or `profile` MAY
+exist but all schemas with same `profile` URI MUST include same field definition
+for fields with same field identifier.
 
 ##### Example
 
@@ -142,9 +147,10 @@ A **field definition** is a JSON object that SHOULD contain:
 The field definition MAY further contain:
 
 * key `url` with an URL link to documentation
+* key `description` with additional description of the field
 * key `occurrence` with the field occurrence
-* key `indicator1` with first [indicator]
-* key `indicator2` with second [indicator]
+* key `indicator1` with first [indicator], assumed as `null` by default
+* key `indicator2` with second [indicator], assumed as `null` by default
 * key `pica3` with corresponding Pica3 number
 * key `positions` with a specification of [positions] (for fixed fields)
 * key `subfields` with a [subfield schedule] (for variable fields)
@@ -235,6 +241,7 @@ element definition** is a JSON object that SHOULD contain:
 The data element definition MAY further contain:
 
 * key `url` with an URL link to documentation
+* key `description` with additional description
 * key `codes` with a [codelist]
 * key `deprecated-codes` with a [codelist] of deprecated codes
 * key `pattern` with a regular expression
@@ -276,6 +283,7 @@ The subfield schedule MAY further contain:
 * key `pattern` with a regular expression
 * key `positions` with a specification of [positions]
 * key `url` with an URL link to documentation
+* key `description` with additional description of the subfield
 * key `order` with a non-negative integer used to specify a partial or complete order
   of subfields
 * key `pica3` with a corresponding Pica3 syntax definition
@@ -318,16 +326,30 @@ An **indicator** is either the value `null` or a JSON object that SHOULD contain
 The indicator MAY further contain:
 
 * key `url` with an URL link to documentation
+* key `description` with additional description of the indicator
 * key `codes` with a [codelist]
 * key `deprecated-codes` with a [codelist] of deprecated codes
 
+Indicator codelist values MUST consist of a single character not being `#`.
+
+##### Example
+
+~~~json
+{
+  "label": "Type",
+  "codes": {
+    " ": "Abbreviated key title",
+    "0": "Other abbreviated title"
+  }
+}
+~~~
 
 #### Codelist
 
 [codelist]: #codelist
 
 A **codelist** is a JSON object that maps values to descriptions. Each
-description is a JSON object with optional key `label`.
+description is a JSON object with optional keys `label` and/or `description`.
 
 ##### Example
 
@@ -390,6 +412,11 @@ match the number of records that have been analyzed.
 * [MARCspec - A common MARC record path language](http://marcspec.github.io/MARCspec/marc-spec.html)
 
 ### Changes
+
+#### 0.5.0 (2020-08-04)
+
+* Add option field `description` in addition to `label`
+* Add schema field `profile` to identify schemas
 
 #### 0.4.0 (2019-05-09)
 
